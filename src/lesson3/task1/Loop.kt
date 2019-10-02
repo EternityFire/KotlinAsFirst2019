@@ -3,6 +3,7 @@
 package lesson3.task1
 
 import lesson1.task1.sqr
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 /**
@@ -70,12 +71,12 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var count = 0
-    var number = n
-    if (number == 0) return 1 else
-        while (number > 0) {
-            number /= 10
-            count++
-        }
+    var number = abs(n)
+    if (number == 0) return 1
+    while (number > 0) {
+        number /= 10
+        count++
+    }
     return count
 }
 
@@ -134,16 +135,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var a = 0
-    for (i in n - 1 downTo 1) {
-        if (n % i == 0) {
-            a = i
-            break
-        }
-    }
-    return a
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая
@@ -158,7 +150,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     while (x != y) {
         if (x > y) x -= y else y -= x
     }
-    return if (y == 1) true else return false
+    return (y == 1)
 }
 
 /**
@@ -186,7 +178,15 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var c = x
+    var count = 0
+    while (c != 1) {
+        count++
+        if (c % 2 == 0) c /= 2 else c = 3 * c + 1
+    }
+    return count
+}
 
 /**
  * Средняя
@@ -217,7 +217,17 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var number = n
+    var l: Int
+    var s = 0
+    while (number > 0) {
+        l = number % 10
+        s = s * 10 + l
+        number /= 10
+    }
+    return s
+}
 
 /**
  * Средняя
@@ -228,7 +238,7 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
@@ -238,7 +248,18 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var number = n
+    val c = number % 10
+    val k = digitNumber(n)
+    var count = 0
+    if (n == 0) return false else
+        while (c == number % 10) {
+            count++
+            number /= 10
+        }
+    return if (count == k) false else return true
+}
 
 /**
  * Сложная
@@ -250,29 +271,24 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var a = 0
+    val z: Int
     var b = 0
-    var c = 1
-    var d = 0
-    var k = 10
+    var count = 0
+    var d: Int
     var l = 1
-    while (a < n) {
+    var p = 0
+    while (count < n) {
         b = sqr(l)
         l++
-        while (b / k != 0) {
-            k *= 10
-            c++
-        }
-        a += c
+        d = digitNumber(b)
+        count += d
     }
-    a -= c
-    k /= 10
-    while (a != n) {
-        d = (b / k) % 10
-        k /= 10
-        a++
+    z = count - n
+    for (i in 1..z + 1) {
+        p = b % 10
+        b /= 10
     }
-    return d
+    return p
 }
 
 
@@ -286,27 +302,22 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var a = 0
+    val z: Int
     var b = 0
-    var c = 1
-    var d = 0
-    var k = 10
+    var count = 0
+    var d: Int
     var l = 1
-    while (a < n) {
+    var p = 0
+    while (count < n) {
         b = fib(l)
         l++
-        while (b / k != 0) {
-            k *= 10
-            c++
-        }
-        a += c
+        d = digitNumber(b)
+        count += d
     }
-    a -= c
-    k /= 10
-    while (a != n) {
-        d = (b / k) % 10
-        k /= 10
-        a++
+    z = count - n
+    for (i in 1..z + 1) {
+        p = b % 10
+        b /= 10
     }
-    return d
+    return p
 }

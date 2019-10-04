@@ -109,7 +109,8 @@ fun lcm(m: Int, n: Int): Int {
     var x = n
     var y = m
     while (x != y) {
-        if (x > y) x -= y else y -= x
+        if (x > y) x -= y
+        else y -= x
     }
     return (m * n / x)
 }
@@ -148,7 +149,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     var x = m
     var y = n
     while (x != y) {
-        if (x > y) x -= y else y -= x
+        if (x > y) x -= y
+        else y -= x
     }
     return (y == 1)
 }
@@ -183,7 +185,8 @@ fun collatzSteps(x: Int): Int {
     var count = 0
     while (c != 1) {
         count++
-        if (c % 2 == 0) c /= 2 else c = 3 * c + 1
+        if (c % 2 == 0) c /= 2
+        else c = 3 * c + 1
     }
     return count
 }
@@ -253,12 +256,13 @@ fun hasDifferentDigits(n: Int): Boolean {
     val c = number % 10
     val k = digitNumber(n)
     var count = 0
-    if (n == 0) return false else
+    if (n == 0) return false
+    else
         while (c == number % 10) {
             count++
             number /= 10
         }
-    return if (count == k) false else return true
+    return (count != k)
 }
 
 /**

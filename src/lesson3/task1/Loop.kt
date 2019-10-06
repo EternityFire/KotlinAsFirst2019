@@ -4,6 +4,7 @@ package lesson3.task1
 
 import lesson1.task1.sqr
 import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -204,7 +205,9 @@ fun collatzSteps(x: Int): Int {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
+
 fun sin(x: Double, eps: Double): Double = TODO()
+
 
 /**
  * Средняя

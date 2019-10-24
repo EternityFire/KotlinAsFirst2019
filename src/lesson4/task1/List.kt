@@ -4,10 +4,8 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
-import lesson3.task1.digitNumber
 import lesson3.task1.isPrime
 import lesson3.task1.minDivisor
-import lesson3.task1.revert
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -330,4 +328,59 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var number = n % 1000
+    var num = n / 1000
+    val list: List<String>
+    val result = mutableListOf<String>()
+    val numbers = listOf(
+        "", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "одна", "две"
+    )
+    val elevToNine = listOf(
+        "", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать",
+        "семнадцать", "восемнадцать", "девятнадцать"
+    )
+    val des = listOf(
+        "", "десять", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят",
+        "девяносто"
+    )
+    val hun = listOf(
+        "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот",
+        "девятьсот"
+    )
+    val thousands = listOf(
+        "", "одна тысяча", "две тысячи", "три тысячи", "четыре тысячи", "пять тысяч", "шесть тысяч",
+        "семь тысяч", "восемь тысяч", "девять тысяч"
+    )
+    if (number > 0) {
+        if (number % 100 in 11..19) {
+            result.add(elevToNine[number % 100 - 10])
+            number /= 100
+            if (number > 0) result.add(hun[number])
+        } else {
+            result.add(numbers[number % 10])
+            result.add(des[number / 10 % 10])
+            result.add(hun[number / 100])
+        }
+    }
+    if (num > 0) {
+        if (num % 100 in 11..19) {
+            result.add("тысяч")
+            result.add(elevToNine[num % 100 - 10])
+            num /= 100
+            if (num > 0) result.add(hun[num])
+        } else {
+            if (num / 100 > 0) result.add("тысяч")
+            else
+                when {
+                    num % 10 == 1 -> result.add(thousands[2])
+                    num % 10 in 2..4 -> result.add(thousands[num % 10])
+                    num % 10 in 5..9 -> result.add(thousands[num % 10])
+                }
+            result.add(des[num / 10 % 10])
+            result.add(hun[num / 100])
+        }
+    }
+    list = result.filter { it != "" }
+    return list.reversed().joinToString(separator = " ").trim()
+}

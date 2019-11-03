@@ -119,21 +119,15 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    var sum = 0.0
-    for (element in v) sum += sqr(element)
-    return sqrt(sum)
-}
+fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
 
 /**
  * Простая
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = when {
-    list.isNotEmpty() -> list.sum() / list.size
-    else -> 0.0
-}
+fun mean(list: List<Double>): Double = if (list.isNotEmpty()) list.sum() / list.size
+else 0.0
 
 /**
  * Средняя
@@ -156,11 +150,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int {
-    var sum = 0
-    for (i in a.indices) sum += a[i] * b[i]
-    return sum
-}
+fun times(a: List<Int>, b: List<Int>): Int = (b.mapIndexed { index, _ -> a[index] * b[index] }.sum())
 
 /**
  * Средняя
@@ -170,15 +160,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int {
-    var sum = 0
-    var k = 1
-    for (i in p.indices) {
-        sum += p[i] * k
-        k *= x
-    }
-    return sum
-}
+fun polynom(p: List<Int>, x: Int): Int = (p.mapIndexed { index, _ -> p[index] * x.toDouble().pow(index).toInt() }.sum())
 
 /**
  * Средняя
@@ -215,7 +197,7 @@ fun factorize(n: Int): List<Int> {
         result.add(m1)
     }
     result.add(x)
-    return result.sorted()
+    return result
 }
 
 /**
@@ -258,7 +240,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String =
-    convert(n, base).joinToString(separator = "") { if (it > 9) (it + 87).toChar().toString() else "$it" }
+    convert(n, base).joinToString(separator = "") { if (it > 9) ('a' + it - 10).toString() else "$it" }
 
 /**
  * Средняя
@@ -289,15 +271,14 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    val line = str.reversed()
     var number: String
-    var result = 0
-    for (i in line.indices) {
-        number = if (line[i].toInt() in 48..57) line[i].toString()
-        else (line[i].toInt() - 87).toString()
-        result += number.toInt() * base.toDouble().pow(i).toInt()
+    val result = mutableListOf<Int>()
+    for (i in str.indices) {
+        number = if (str[i] in '0'..'9') str[i].toString()
+        else (str[i] - 'a' + 10).toString()
+        result.add(number.toInt())
     }
-    return result
+    return decimal(result, base)
 }
 
 /**

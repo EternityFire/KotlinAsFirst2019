@@ -102,10 +102,7 @@ class Tests {
     @Test
     @Tag("Easy")
     fun buildGrades() {
-        assertEquals(
-            mapOf<Int, List<String>>(),
-            buildGrades(mapOf())
-        )
+
         assertEquals(
             mapOf(5 to listOf("Михаил", "Семён"), 3 to listOf("Марат")),
             buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
@@ -143,10 +140,7 @@ class Tests {
     @Test
     @Tag("Easy")
     fun whoAreInBoth() {
-        assertEquals(
-            emptyList<String>(),
-            whoAreInBoth(emptyList(), emptyList())
-        )
+
         assertEquals(
             listOf("Marat"),
             whoAreInBoth(listOf("Marat", "Mikhail"), listOf("Marat", "Kirill"))

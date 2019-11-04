@@ -351,7 +351,7 @@ fun russian(n: Int): String {
             num /= 100
             if (num > 0) result.add(hun[num])
         } else {
-            if ((num / 100 > 0) && (num % 10 == 0)) result.add("тысяч")
+            if (((num / 100 > 0) || (num / 10 > 0)) && (num % 10 == 0)) result.add("тысяч")
             else
                 when {
                     num % 10 == 1 -> result.add(thousands[1])

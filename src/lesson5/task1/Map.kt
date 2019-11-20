@@ -139,7 +139,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().intersect(b).toList()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList()
 
 /**
  * Средняя
@@ -163,7 +163,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
     for ((name, number) in mapB)
         if (result[name] == null) result[name] = number
         else
-            if (result[name] != number) result[name] += ", $number"
+            if (result[name] != number) result[name] = result[name] + ", $number"
     return result
 }
 
@@ -178,15 +178,17 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val group = stockPrices.groupBy { it.first }
     val result = mutableMapOf<String, Double>()
-    val count = mutableMapOf<String, Int>()
-    for ((name, price) in stockPrices) {
-        count[name] = count.getOrDefault(name, 0) + 1
-        result[name] = result.getOrDefault(name, 0.0) + price
+    var sum = 0.0
+    for ((key) in group) {
+        group[key]?.map { sum += it.second }
+        result[key] = sum / (group[key]?.size ?: 1)
+        sum = 0.0
     }
-    for ((name, price) in result) result[name] = price / (count[name]!!)
     return result
 }
+
 
 /**
  * Средняя
@@ -207,10 +209,13 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     var result: String? = null
     var min = Double.MAX_VALUE
     for ((name, price) in stuff)
-        if ((kind == price.first) && (price.second <= min)) {
-            result = name
-            min = price.second
-        }
+        if (kind == price.first)
+            stuff.map {
+                if (price.second <= min) {
+                    result = name
+                    min = price.second
+                }
+            }
     return result
 }
 
@@ -224,9 +229,12 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val s = word.toLowerCase().toSet()
-    val c = chars.map { it.toLowerCase() }.toSet()
-    return c.containsAll(s)
+    if (chars.size == word.length) {
+        return chars.map { it.toLowerCase().toString() }
+            .containsAll(listOf(word.toLowerCase()))
+    }
+    return chars.map { it.toLowerCase() }
+        .containsAll(word.toLowerCase().toSet())
 }
 
 /**
@@ -242,10 +250,11 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
+    val group = list.groupBy { it }
     val result = mutableMapOf<String, Int>()
-    for (element in list)
-        result[element] = result.getOrDefault(element, 0) + 1
-    return result.filter { it.value > 1 }
+    for ((key) in group)
+        if (group[key]?.size ?: 0 > 1) result[key] = group[key]?.size!!
+    return result
 }
 
 /**
@@ -333,4 +342,20 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val a = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
+    for (n in 1..treasures.size) {
+        for (w in 1..capacity) {
+            val weight = mutableListOf(0)
+            val p = mutableListOf(0)
+            if (w >= weight[n]) a[n][w] = maxOf(a[n - 1][w], a[n - 1][w - weight[n] + p[n]])
+            else a[n][w] = a[n - 1][w]
+            fun findAns(n: Int, k: Int) {
+                if (a[n][w] == 0)
+                    return if (a[n - 1][w] == a[n][w]) findAns(n - 1, w)
+                    else findAns(n - 1, w - weight[n])
+            }
+        }
+    }
+    return setOf()
+}

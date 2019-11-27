@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -69,7 +71,24 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val list = listOf(
+        "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+        "сентября", "октября", "ноября", "декабря"
+    )
+    return try {
+        val parts = str.split(" ")
+        val day = parts[0].toInt()
+        val month = list.indexOf(parts[1]) + 1
+        val year = parts[2].toInt()
+        if (month > 0 && day > 0 && year > 0 && daysInMonth(month, year) > day)
+            String.format("%02d.%02d.%d", day, month, year)
+        else ""
+    } catch (e: IndexOutOfBoundsException) {
+        ""
+    }
+}
+
 /**
  * Средняя
  *
@@ -80,7 +99,26 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val list = listOf(
+        "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+        "сентября", "октября", "ноября", "декабря"
+    )
+    return try {
+        val parts = digital.split(".")
+        val day = parts[0].toInt()
+        val month = parts[1].toInt()
+        val year = parts[2].toInt()
+        val m = list[parts[1].toInt() - 1]
+        if (parts.size == 3 && month > 0 && day > 0 && year > 0 && daysInMonth(month, year) > day)
+            String.format("%d $m $year", day)
+        else ""
+    } catch (e: NumberFormatException) {
+        ""
+    } catch (e: ArrayIndexOutOfBoundsException) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -96,7 +134,11 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    return if (phone.contains(Regex("""\(+\)|[a-z]|_""")))
+        ("")
+    else (Regex("""[ \-()]""").replace(phone, ""))
+}
 
 /**
  * Средняя
@@ -108,7 +150,11 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    return if (jumps.contains(Regex("""\d [^+]""")))
+        jumps.split(" ").filter { it != "%" && it != "-" }.map { it.toInt() }.max()!!
+    else -1
+}
 
 /**
  * Сложная

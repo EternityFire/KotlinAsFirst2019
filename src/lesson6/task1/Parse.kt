@@ -185,20 +185,21 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    val e = IllegalArgumentException()
-    if (expression == "")
-        throw e
     if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d"""))) {
         val e = IllegalArgumentException()
         throw e
     } else {
         val list = expression.split(" ")
         var sum = list[0].toInt()
-        for (i in list.indices) {
-            if (list[i] == "+")
-                sum += list[i + 1].toInt()
-            if (list[i] == "-")
-                sum -= list[i + 1].toInt()
+        try {
+            for (i in list.indices) {
+                if (list[i] == "+")
+                    sum += list[i + 1].toInt()
+                if (list[i] == "-")
+                    sum -= list[i + 1].toInt()
+            }
+        } catch (e: NumberFormatException) {
+            throw e
         }
         return sum
     }
@@ -216,12 +217,16 @@ fun plusMinus(expression: String): Int {
 fun firstDuplicateIndex(str: String): Int {
     var count = 0
     val list = str.split(" ")
-    for (i in list.indices) {
-        count += list[i].length + 1
-        if (list.size > 1 && list[i].toLowerCase() == list[i + 1].toLowerCase()) {
-            count -= list[i].length + 1
-            return count
+    try {
+        for (i in list.indices) {
+            count += list[i].length + 1
+            if (list.size > 1 && list[i].toLowerCase() == list[i + 1].toLowerCase()) {
+                count -= list[i].length + 1
+                return count
+            }
         }
+    } catch (e: IndexOutOfBoundsException) {
+        throw e
     }
     return -1
 }

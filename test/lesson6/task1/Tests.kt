@@ -104,7 +104,7 @@ class Tests {
     @Tag("Hard")
     fun firstDuplicateIndex() {
 
-        assertEquals(9, firstDuplicateIndex("Он пошёл в в школу"))
+        assertEquals(-1, firstDuplicateIndex("a, y"))
         assertEquals(40, firstDuplicateIndex("Яблоко упало на ветку с ветки оно упало на на землю"))
         assertEquals(9, firstDuplicateIndex("Мы пошли прямо Прямо располагался магазин"))
     }

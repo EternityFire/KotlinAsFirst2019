@@ -123,6 +123,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
                 if (currentLineLength > 0) {
                     it.newLine()
                     currentLineLength = 0
+                    currentLineLength = 0
                 }
                 continue
             }

@@ -84,8 +84,8 @@ fun dateStrToDigit(str: String): String {
         if (month > 0 && day > 0 && year >= 0 && daysInMonth(month, year) >= day)
             String.format("%02d.%02d.%d", day, month, year)
         else ""
-    } catch (e: IndexOutOfBoundsException) {
-        ""
+    } catch (e: Exception) {
+        return ""
     }
 }
 
@@ -113,10 +113,8 @@ fun dateDigitToStr(digital: String): String {
         if (parts.size == 3 && month > 0 && day > 0 && year >= 0 && daysInMonth(month, year) >= day)
             String.format("%d $m $year", day)
         else ""
-    } catch (e: NumberFormatException) {
-        ""
-    } catch (e: ArrayIndexOutOfBoundsException) {
-        ""
+    } catch (e: Exception) {
+        return ""
     }
 }
 
@@ -187,8 +185,11 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
+    val e = IllegalArgumentException()
+    if (expression == "")
+        throw e
     if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d"""))) {
-        val e = IllegalArgumentException("Description")
+        val e = IllegalArgumentException()
         throw e
     } else {
         val list = expression.split(" ")
@@ -240,12 +241,16 @@ fun mostExpensive(description: String): String {
     var max = 0.0
     var result = ""
     val list = description.split("; ", " ")
-    if (list.size > 1)
-        for (i in list.indices step 2)
-            if (list[i + 1].toDouble() > max) {
-                max = list[i + 1].toDouble()
-                result = list[i]
-            }
+    try {
+        if (list.size > 1)
+            for (i in list.indices step 2)
+                if (list[i + 1].toDouble() > max) {
+                    max = list[i + 1].toDouble()
+                    result = list[i]
+                }
+    } catch (e: Exception) {
+        return ""
+    }
     return result
 }
 

@@ -132,11 +132,7 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String {
-    return if (phone.contains(Regex("""\(+\)|[a-z]|_|%|\\|\\+\w""")))
-        ("")
-    else (Regex("""[ \-()]""").replace(phone, ""))
-}
+fun flattenPhoneNumber(phone: String): String = TODO()
 
 /**
  * Средняя
@@ -185,7 +181,7 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d"""))) {
+    if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d""")) && expression == "") {
         val e = IllegalArgumentException()
         throw e
     } else {
@@ -255,7 +251,7 @@ fun mostExpensive(description: String): String {
                 }
         result
     } catch (e: Exception) {
-        "Any good with price 0.0"
+        throw e
     }
 }
 

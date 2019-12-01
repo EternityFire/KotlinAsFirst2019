@@ -207,15 +207,9 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var result: String? = null
-    var min = Double.MAX_VALUE
-    for ((name, price) in stuff)
-        if (kind == price.first)
-            stuff.map {
-                if (price.second <= min) {
-                    result = name
-                    min = price.second
-                }
-            }
+    for ((name, price) in stuff) {
+        result = stuff.filter { kind == price.first }.minBy { price.second }?.key
+    }
     return result
 }
 
@@ -229,7 +223,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    word.toLowerCase().toList().map { if (it !in chars) return false }
+    word.toLowerCase().toList().map { it -> if (it !in chars.map { it.toLowerCase() }) return false }
     return true
 }
 
@@ -309,10 +303,10 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var num: Int
+    val map = mutableMapOf<Int, Int>()
     for (i in list.indices) {
-        num = number - list[i]
-        if (num in list && list.indexOf(num) != i) return i to list.indexOf(num)
+        if (map[list[i]] == null) map[number - list[i]] = i
+        else return map[list[i]]!! to i
     }
     return -1 to -1
 }

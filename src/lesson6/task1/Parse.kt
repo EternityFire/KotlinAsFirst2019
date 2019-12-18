@@ -181,7 +181,7 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d""")) && expression == "") {
+    if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d""")) || expression == "") {
         val e = IllegalArgumentException()
         throw e
     } else {

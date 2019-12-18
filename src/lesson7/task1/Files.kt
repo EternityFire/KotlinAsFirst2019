@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.max
 
 /**
  * Пример
@@ -53,26 +54,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): MutableMap<String, Int?> {
-    val map = mutableMapOf<String, Int?>()
-    for (i in substrings.indices) {
-        map[substrings[i]] = 0
-        for (line in File(inputName).readLines()) {
-            var str = line.toLowerCase()
-            if (str.contains(substrings[i].toLowerCase())) {
-                for (j in str.indices) {
-                    map[substrings[i]] = map[substrings[i]]?.plus(1)
-                    var c = str.indexOf(substrings[i])
-                    str = str.replaceRange(
-                        str.indexOf(substrings[i]) until str.indexOf(substrings[i]) + substrings[i].length,
-                        " "
-                    )
-                }
-            }
-        }
-    }
-    return map
-}
+fun countSubstrings(inputName: String, substrings: List<String>): MutableMap<String, Int?> = TODO()
 
 /**
  * Средняя
@@ -91,7 +73,7 @@ fun sibilants(inputName: String, outputName: String) {
     val list1 = listOf("Ж", "ж", "Ч", "ч", "Ш", "ш", "Щ", "щ")
     val list2 = listOf("И", "и", "А", "а", "У", "у")
     val list3 = listOf("Ы", "ы", "Я", "я", "Ю", "ю")
-    val outputFile = File(outputName).bufferedWriter()
+    val outputStr = File(outputName).bufferedWriter()
     var str: String
     for (line in File(inputName).readLines()) {
         str = line
@@ -100,16 +82,13 @@ fun sibilants(inputName: String, outputName: String) {
                 val w1 = line[i]
                 val w2 = line[i + 1]
                 val w3 = list2[list3.indexOf(line[i + 1].toString())]
-                str = str.replace(
-                    Regex("""$w1$w2"""),
-                    "$w1$w3"
-                )
+                str = str.replace("$w1$w2", "$w1$w3")
             }
         }
-        outputFile.write(str)
-        outputFile.newLine()
+        outputStr.write(str)
+        outputStr.newLine()
     }
-    outputFile.close()
+    outputStr.close()
 }
 
 /**
@@ -130,7 +109,21 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    var maxLength = 0
+    val output = File(outputName).bufferedWriter()
+    val input = File(inputName).readLines().map { it.trim() }
+    for (lines in input) {
+        if (lines.length > maxLength) maxLength = lines.length
+    }
+    for (lines in input) {
+        var str = ""
+        for (i in 1..(maxLength - lines.length) / 2)
+            str += " "
+        str += lines
+        output.write(str)
+        output.newLine()
+    }
+    output.close()
 }
 
 /**

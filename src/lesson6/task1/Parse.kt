@@ -181,7 +181,7 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d|[a-z]|\\|!""")) || expression == "") {
+    if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d|[a-z]|\\|!|.""")) || expression == "") {
         val e = IllegalArgumentException()
         throw e
     } else {
@@ -242,17 +242,17 @@ fun mostExpensive(description: String): String {
     var max = 0.0
     var result = ""
     val list = description.split("; ", " ")
-    return try {
+    try {
         if (list.size > 1)
             for (i in list.indices step 2)
-                if (list[i + 1].toDouble() > max) {
+                if (list[i + 1].toDouble() >= max) {
                     max = list[i + 1].toDouble()
                     result = list[i]
                 }
-        result
     } catch (e: Exception) {
         return ""
     }
+    return result
 }
 
 /**

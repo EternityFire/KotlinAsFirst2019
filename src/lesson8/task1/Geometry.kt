@@ -77,8 +77,9 @@ data class Circle(val center: Point, val radius: Double) {
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
     fun distance(other: Circle): Double {
+        val dist = center.distance(other.center) - radius - other.radius
         return when {
-            center.distance(other.center) - radius - other.radius > 0 -> center.distance(other.center) - radius - other.radius
+            dist > 0 -> dist
             else -> 0.0
         }
     }
@@ -109,10 +110,7 @@ data class Segment(val begin: Point, val end: Point) {
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
 fun diameter(vararg points: Point): Segment {
-    if (points.size < 2) {
-        val e = IllegalArgumentException()
-        throw e
-    }
+    require(points.size >= 2)
     var result = Segment(points[0], points[1])
     var max = points[0].distance(points[1])
     for (i in points.indices)
@@ -197,10 +195,7 @@ fun bisectorByPoints(a: Point, b: Point): Line =
  * Если в списке менее двух окружностей, бросить IllegalArgumentException
  */
 fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
-    if (circles.size < 2) {
-        val e = IllegalArgumentException()
-        throw e
-    }
+    require(circles.size >= 2)
     var result = Pair(circles[0], circles[1])
     var min = circles[0].distance(circles[1])
     for (i in circles.indices)

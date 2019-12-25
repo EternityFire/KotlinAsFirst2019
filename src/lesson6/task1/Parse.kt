@@ -181,23 +181,21 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|-+\s+-|\++\s+-|\d+\+|\d+-|-+\d|\++\d|[a-z]|\\|!|.""")) || expression == "") {
-        val e = IllegalArgumentException()
-        throw e
-    } else {
-        val list = expression.split(" ")
-        var sum = list[0].toInt()
-        try {
-            for (i in list.indices) {
-                if (list[i] == "+")
-                    sum += list[i + 1].toInt()
-                if (list[i] == "-")
-                    sum -= list[i + 1].toInt()
-            }
-            return sum
-        } catch (e: Exception) {
-            throw e
+    require(
+        !(expression.contains(Regex("""\++\s+\+|\d+\s+\d|-+\s+\+|\d+\+|\d+-|-+\d|\++\d|-+\s+-|\++\s+-|[a-z]|\\|!|\.""")) || expression == "")
+    )
+    val list = expression.split(" ")
+    var sum = list[0].toInt()
+    try {
+        for (i in list.indices) {
+            if (list[i] == "+")
+                sum += list[i + 1].toInt()
+            if (list[i] == "-")
+                sum -= list[i + 1].toInt()
         }
+        return sum
+    } catch (e: Exception) {
+        throw e
     }
 }
 
